@@ -1,4 +1,6 @@
 from django.contrib import admin
-from .models import Profile
+from .models import Profile, Address, City, DayWeek, Speciality, Neighborhood, Rating, State
 
-admin.site.register(Profile)
+models = [Profile, Address, City, DayWeek,
+          Speciality, Neighborhood, Rating, State]
+admin.site.register(models)

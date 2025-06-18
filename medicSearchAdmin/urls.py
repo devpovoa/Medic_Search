@@ -9,6 +9,7 @@ urlpatterns = [
     # Caso queira remover o HomeUrls, vai continuar funcionando.
     path('', include('medicSearch.urls.HomeUrls')),
     path('profile/', include('medicSearch.urls.ProfileUrls')),
+    path('medics/', include('medicSearch.urls.MedicUrls')),
 ]
 
 urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)

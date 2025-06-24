@@ -1,4 +1,4 @@
-from django.http import HttpResponse
+from django.shortcuts import render
 from medicSearch.models import Profile
 from django.db.models import Q
 

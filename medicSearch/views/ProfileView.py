@@ -1,9 +1,26 @@
-from django.http import HttpResponse
+from django.shortcuts import render, redirect
+from medicSearch.models.Profile import Profile
+from django.core.paginator import Paginator
 
 
-def list_profile_view(request, _id=None):
-    if _id is None and request.user.is_authenticated:
-        _id = request.user.id
-    elif not request.user.is_authenticated:
-        _id = 0
-    return HttpResponse('<h1>Usuário de id %s!</h1>' % _id)
+def list_profile_view(request, id=None):
+    profile = None
+    if id is None and request.user.is_authenticated:
+        profile = Profile.objects.filter(user=request.user).first()
+    elif id is not None:
+        profile = Profile.objects.filter(user__id=id).first()
+    elif request.user.is_authenticated:
+        return redirect(to="/")
+
+    favorites = profile.show_favorites()
+    if len(favorites) > 0:
+        paginator = Paginator(favorites, 8)
+        page = request.GET.get('page')
+        favorites = paginator.get_page(page)
+
+    context = {
+        'profile': profile,
+        'favorites': favorites,
+    }
+
+    return render(request, template_name='profile/profile.html', context=context, status=200)

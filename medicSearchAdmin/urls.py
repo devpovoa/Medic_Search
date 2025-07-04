@@ -4,9 +4,10 @@ from django.conf.urls.static import static
 from django.conf import settings
 
 urlpatterns = [
+# Caso queira remover o HomeUrls, vai continuar funcionando.
     path('admin/', admin.site.urls),
-    # Caso queira remover o HomeUrls, vai continuar funcionando.
     path('', include('medicSearch.urls.HomeUrls')),
+    path('', include('medicSearch.urls.AuthUrls')),
     path('profile/', include('medicSearch.urls.ProfileUrls')),
     path('medics/', include('medicSearch.urls.MedicUrls')),
 ]

@@ -1,5 +1,6 @@
 from django.shortcuts import render, redirect
-from medicSearch.models import Profile
+from medicSearch.models import Profile, Rating
+from medicSearch.forms.MedicForm import MedicRatingForm
 from django.db.models import Q
 from django.core.paginator import Paginator
 
@@ -109,3 +110,36 @@ def remove_favorite_view(request):
 
     arguments += f"&msg={msg}&type={_type}"
     return redirect(to=f"/profile/{arguments}")
+
+def rate_medic(request, medic_id=None):
+    medic = Profile.objects.filter(user__id=medic_id).first()
+    rating = Rating.objects.filter(user=request.user, user_rated=medic.user).first()
+    message = None
+
+    initial = {'user': request.user, 'user_rated': medic.user}
+
+    if request.method == "POST":
+        ratingForm = MedicRatingForm(request.POST, instance=rating, initial=initial)
+    else:
+        ratingForm = MedicRatingForm(initial=initial, instance=rating)
+
+    if ratingForm.is_valid():
+        ratingForm.save()
+        message = {
+            'type': 'success',
+            'text': 'Avaliação salva com sucesso!',
+        }
+    else:
+        if request.method == "POST":
+            message = {
+                'type': 'danger',
+                'text': 'Erro ao salvar avaliação'
+            }
+
+    context = {
+        'ratingForm': ratingForm,
+        'medic': medic,
+        'message': message,
+    }
+
+    return render(request, template_name='medic/rating.html', context=context, status=200)

@@ -3,7 +3,7 @@ from medicSearch.models import Profile, Rating
 from medicSearch.forms.MedicForm import MedicRatingForm
 from django.db.models import Q
 from django.core.paginator import Paginator
-
+from django.contrib.auth.decorators import login_required
 
 def list_medics_view(request):
     name = request.GET.get("name")
@@ -111,6 +111,7 @@ def remove_favorite_view(request):
     arguments += f"&msg={msg}&type={_type}"
     return redirect(to=f"/profile/{arguments}")
 
+@login_required
 def rate_medic(request, medic_id=None):
     medic = Profile.objects.filter(user__id=medic_id).first()
     rating = Rating.objects.filter(user=request.user, user_rated=medic.user).first()

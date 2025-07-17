@@ -1,5 +1,5 @@
 from django.shortcuts import render, redirect
-from django.contrib.auth import authenticate, login
+from django.contrib.auth import authenticate, login, logout
 from medicSearch.forms.AuthForm import LoginForm, RegisterForm
 from django.contrib.auth.models import User
 
@@ -20,7 +20,12 @@ def login_view(request):
             user = authenticate(username=username, password=password)
             if user is not None:
                 login(request, user)
-                return redirect('/')
+                _next = request.GET.get('next')
+
+                if _next is not None:
+                    return redirect(_next)
+                else:
+                    return redirect('/')
             else:
                 message = {
                     'type': 'danger',
@@ -84,3 +89,7 @@ def register_view(request):
         'link_href': '/login'
     }
     return render(request, template_name='auth/auth.html', context=context, status=200)
+
+def logout_view(request):
+    logout(request)
+    return redirect('/login')

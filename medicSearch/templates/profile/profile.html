@@ -51,7 +51,7 @@
                         {% endif %}
                         {% if profile.role == 2 and request.user.is_authenticated %}
                             <li class="list-group-item">
-                                <a class="btn btn-warning" href={% url 'rate-medic' profile.user.id %}>Avaliar <i class="fa fa-star"></i></a>
+                                <a href="{% url 'rate-medic' profile.user.id %}" class="btn btn-warning">Avaliar <i class="fa fa-star"></i></a>
                             </li>
                         {% endif %}
                     </ul>
@@ -89,8 +89,11 @@
                                                     {{ addr.address|default:"Nenhum endereço."|slice:"15" }}...
                                                 {% endwith %}
                                             </div>
-                                            <a class="btn btn-primary btn-card"
-                                               href="{% url 'profile' favorite.id %}">Ver Médico</a>
+                                            {% if favorite.id %}
+                                            <a class="btn btn-primary btn-card" href="{% url 'profile' favorite.id %}">Ver Médico</a>
+                                            {% else %}
+                                                <span class="badge badge-secondary">Favorito mockado</span>
+                                            {% endif %}
                                             {% if user.is_authenticated %}
                                                 <form method="POST" action="{% url 'medic-favorite-remove' %}">
                                                     {% csrf_token %}

@@ -12,7 +12,7 @@ def list_medics_view(request):
     city = request.GET.get("city")
     state = request.GET.get("state")
 
-    medics = Profile.objects
+    medics = Profile.objects.all()
 
     # Aqui aplicamos uma consulta SQL.
     if name is not None and name != '':
@@ -30,10 +30,11 @@ def list_medics_view(request):
         elif state is not None:
             medics = medics.filter(addresses__neighborhood__city__state__id=state)
 
-    if len(medics) > 0:
-        paginator = Paginator(medics, 8)
-        page = request.GET.get("page")
-        medics = paginator.get_page(page)
+    
+    medics = medics.order_by('user__first_name')
+    paginator = Paginator(medics, 8)
+    page = request.GET.get("page")
+    medics = paginator.get_page(page)
 
     get_copy = request.GET.copy()
     parameters = get_copy.pop("page", True) and get_copy.urlencode()

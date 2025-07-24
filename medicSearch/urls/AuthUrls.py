@@ -6,6 +6,6 @@ urlpatterns = [
     path("register/", register_view, name="register"),
     path("logout/", logout_view, name="logout"),
     path("recovery/", recover_view, name="recovery"),
-    path("change-password/<str:token>", change_password_view, name="change_password"),
+    path("change-password/<str:token>/", change_password_view, name="change_password"),
     path('auth/', include('social_django.urls', namespace='social')),
 ]

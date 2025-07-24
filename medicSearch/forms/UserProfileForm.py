@@ -12,7 +12,7 @@ class UserProfileForm(ModelForm):
 
     class Meta:
         model = Profile
-        fields = ['user', 'role', 'birthday', 'image']
+        fields = ['role', 'birthday', 'image']
         widgets = {
             'user': forms.HiddenInput(),
             'role': forms.Select(attrs={'class': 'form-control'}),

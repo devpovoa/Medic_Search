@@ -60,8 +60,8 @@ class Profile(models.Model):
 
     def show_favorites(self):
         ids = [result.id for result in self.favorites.all()]
-        return Profile.objects.filter(user__id__in=ids)
+        return Profile.objects.filter(user__id__in=ids).order_by("user__username")
 
     def show_ratings(self):
         from .Rating import Rating
-        return Rating.objects.filter(user_rated=self.user)
+        return Rating.objects.filter(user_rated=self.user).order_by("-created_at")
